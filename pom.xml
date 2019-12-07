@@ -33,7 +33,8 @@
 			<version>3.0.0</version>
 			<type>pom</type>
 		</dependency>
-
+		
+		
 		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
 		<dependency>
 			<groupId>io.rest-assured</groupId>

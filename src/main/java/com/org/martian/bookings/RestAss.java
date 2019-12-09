@@ -1,6 +1,6 @@
 package com.org.martian.bookings;
 
-public class RestAssured {
+public class RestAss {
 
 	/**
 	 * @param args

@@ -12,7 +12,7 @@ import cucumber.api.junit.Cucumber;
 		,strict = false
 		,dryRun = false
 		,monochrome = true
-		,tags={"@Create"}
+		,tags={"@DeleteBooking"}
 		)
 
 public class CucumberTestRunner {

@@ -1,5 +1,8 @@
 package com.org.martian.bookings;
 
+import java.util.List;
+import java.util.Map;
+
 public class Booking {
 
 	//Object Properties
@@ -7,6 +10,27 @@ public class Booking {
 	private String lastname;
 	private int totalprice;
 	private boolean depositpaid;
+	private BookingDates bookingdates;
+	private String additionalneeds;
+	
+	public Booking()
+	{
+		
+	}
+	
+	public Booking(List<Map<String, String>> list)
+	{
+		BookingDates bdates = new BookingDates();
+		bdates.setCheckin(list.get(4).get("Value").trim());
+		bdates.setCheckout(list.get(5).get("Value").trim());
+
+		this.setFirstname(list.get(0).get("Value").trim());
+		this.setLastname(list.get(1).get("Value").trim());
+		this.setTotalprice(Integer.parseInt(list.get(2).get("Value").trim()));
+		this.setDepositpaid(Boolean.parseBoolean(list.get(3).get("Value").trim()));
+		this.setBookingdates(bdates);
+		this.setAdditionalneeds(list.get(6).get("Value").trim());
+	}
 	
 	//Setters and Getters
 	public String getFirstname() {
@@ -45,8 +69,7 @@ public class Booking {
 	public void setAdditionalneeds(String additionalneeds) {
 		this.additionalneeds = additionalneeds;
 	}
-	private BookingDates bookingdates;
-	private String additionalneeds;
+
 	
 
 }

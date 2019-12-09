@@ -3,6 +3,7 @@ package com.org.martian.bookings.tests;
 import java.util.List;
 import java.util.Map;
 import org.junit.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
@@ -36,20 +37,7 @@ public class CreateBookingStepDef {
 		
 		ObjectMapper mapper = new ObjectMapper();
 	    mapper.enable(SerializationFeature.INDENT_OUTPUT);
-	      
-		BookingDates bdates = new BookingDates();
-		bdates.setCheckin(list.get(4).get("Value").trim());
-		bdates.setCheckout(list.get(5).get("Value").trim());
-		
-		
-		Booking booking = new Booking();
-		booking.setFirstname(list.get(0).get("Value").trim());
-		booking.setLastname(list.get(1).get("Value").trim());
-		booking.setTotalprice(Integer.parseInt(list.get(2).get("Value").trim()));
-		booking.setDepositpaid(Boolean.parseBoolean(list.get(3).get("Value").trim()));
-		booking.setBookingdates(bdates);
-		booking.setAdditionalneeds(list.get(6).get("Value").trim());
-		
+		Booking booking = new Booking(list);
 		String json = mapper.writeValueAsString(booking);
 		
 		RequestSpecification request = RestAssured.given();
@@ -65,43 +53,40 @@ public class CreateBookingStepDef {
 								200, response.getStatusCode());
 	}
 	
-	@When("^the data given in response body is equal to the data in request body$")
+	@Then("^the data given in response body is equal to the data in request body$")
 	public void verifyResponseBody(DataTable dt) {
+		
 		List<Map<String, String>> list = dt.asMaps(String.class, String.class);
 		
-		JsonObject jsonObject = new JsonParser().parse(response.getBody().asString()).getAsJsonObject();
-
-		JsonObject bookingObj = jsonObject.getAsJsonObject("booking");
+		Booking expectedResult = new Booking(list);
 		
-		String fName = bookingObj.get("firstname").getAsString().trim();
-		String lName = bookingObj.get("lastname").getAsString().trim();
-		int totalPrice = bookingObj.get("totalprice").getAsInt();
-		boolean depositpaid = bookingObj.get("depositpaid").getAsBoolean();
-		String additionalNeeds = bookingObj.get("additionalneeds").getAsString().trim();;
-		String checkIn = bookingObj.getAsJsonObject("bookingdates").get("checkin").getAsString().trim();
-		String checkOut = bookingObj.getAsJsonObject("bookingdates").get("checkout").getAsString().trim();
+		JsonObject jsonObject = new JsonParser().parse(response.getBody().asString()).getAsJsonObject();
+		
+		Booking actualResult = new Gson().fromJson(jsonObject.get("booking"), Booking.class);
 		
 		Assert.assertEquals("Unable to verify first name ",
-				list.get(0).get("Value").trim(),fName);
+				expectedResult.getFirstname(),actualResult.getFirstname());
 		
 		Assert.assertEquals("Unable to verify last name ",
-				list.get(1).get("Value").trim(),lName);
+				expectedResult.getLastname(),actualResult.getLastname());
 		
 		Assert.assertEquals("Unable to verify total price ",
-				Integer.parseInt(list.get(2).get("Value").trim()),totalPrice);
+				expectedResult.getTotalprice(),actualResult.getTotalprice());
 		
 		Assert.assertEquals("Unable to verify deposit paid ",
-				Boolean.parseBoolean(list.get(3).get("Value").trim()),depositpaid);
+				expectedResult.isDepositpaid(),actualResult.isDepositpaid());
 		
 		Assert.assertEquals("Unable to verify checkin date ",
-				list.get(4).get("Value").trim(), checkIn);
+				expectedResult.getBookingdates().getCheckin(), 
+				actualResult.getBookingdates().getCheckin());
 		
 		Assert.assertEquals("Unable to verify checkout date ",
-				list.get(5).get("Value").trim(), checkOut);
+				expectedResult.getBookingdates().getCheckout(), 
+				actualResult.getBookingdates().getCheckout());
 		
 		Assert.assertEquals("Unable to verify additional needs ",
-				list.get(6).get("Value").trim(), additionalNeeds);
-		
+				expectedResult.getAdditionalneeds(), 
+				actualResult.getAdditionalneeds());
 	}
 	
 	@Then("^Response body has bookingid field with non-null value$")

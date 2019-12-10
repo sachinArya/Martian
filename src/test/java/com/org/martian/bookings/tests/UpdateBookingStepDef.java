@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.org.martian.bookings.Booking;
-import com.org.martian.bookings.BookingDates;
 
 import io.cucumber.datatable.DataTable;
 import io.restassured.RestAssured;

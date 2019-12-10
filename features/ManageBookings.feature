@@ -84,7 +84,8 @@ Feature: User is able to manage booking operations like creation, updation, dele
 			    | checkin				  |2018-01-01	|
 			    | checkout				|2019-01-01	|
 			    | additionalneeds |Lunch			|
-      
+			    
+  @TestSuite    
 	@DeleteBooking
 	Scenario: Delete existing booking
 		Given user is able to authenticate and tokenid using credentials to call deletion api

@@ -12,7 +12,9 @@ import cucumber.api.junit.Cucumber;
 		,strict = false
 		,dryRun = false
 		,monochrome = true
-		,tags={"@CreateBooking"}
+		,tags={"@TestSuite"}
+		, plugin = { "html:testResults"}
+
 		)
 
 public class CucumberTestRunner {
